@@ -122,9 +122,9 @@ namespace Roommates.Repositories
                 {
                     cmd.CommandText = @"INSERT INTO Roommate (FirstName, LastName, RentPortion, MoveInDate, RoomId)
                                         OUTPUT INSERTED.Id
-                                        VALUES (@firstname, @lastname, @rentPortion, @moveInDate, @RoomId)";
-                    cmd.Parameters.AddWithValue("@firstname", roommate.Firstname);
-                    cmd.Parameters.AddWithValue("@lastname", roommate.Lastname);
+                                        VALUES (@firstName, @lastName, @rentPortion, @moveInDate, @RoomId)";
+                    cmd.Parameters.AddWithValue("@firstName", roommate.Firstname);
+                    cmd.Parameters.AddWithValue("@lastName", roommate.Lastname);
                     cmd.Parameters.AddWithValue("@rentPortion", roommate.RentPortion);
                     cmd.Parameters.AddWithValue("@moveInDate", roommate.MovedInDate);
                     cmd.Parameters.AddWithValue("@RoomId", roommate.Room.Id);
@@ -137,7 +137,25 @@ namespace Roommates.Repositories
 
         public void Update(Roommate roommate)
         {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE Roommate
+                                        SET FirstName = @firstName, LastName = @lastName, RentPortion = @rentPortion,
+                                                        MoveInDate = @moveInDate, RoomId = @roomId
+                                                        WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@id", roommate.Id);
+                    cmd.Parameters.AddWithValue("@firstName", roommate.Firstname);
+                    cmd.Parameters.AddWithValue("@lastName", roommate.Lastname);
+                    cmd.Parameters.AddWithValue("@rentPortion", roommate.RentPortion);
+                    cmd.Parameters.AddWithValue("@moveInDate", roommate.MovedInDate);
+                    cmd.Parameters.AddWithValue("@RoomId", roommate.Room.Id);
 
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
     }
 }

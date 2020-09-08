@@ -110,6 +110,22 @@ namespace Roommates
             Console.WriteLine($"Added new roommate with id {fred.Id}");
 
 
+            // Update roommate
+            fred.RentPortion = 20;
+
+            roommateRepo.Update(fred);
+            Console.WriteLine("Updated Friedrich to show a lower rent portion");
+            Console.WriteLine("-----------------------------------------");
+            allRoommates = roommateRepo.GetAll();
+            foreach (Roommate roommate in allRoommates)
+            {
+                Console.WriteLine($"{roommate.Id} {roommate.Firstname} {roommate.Lastname} {roommate.RentPortion} {roommate.MovedInDate}");
+            }
+
+
+
+
+
 
 
         }
