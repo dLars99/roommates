@@ -77,6 +77,7 @@ namespace Roommates
                 Console.WriteLine($"{roommate.Id} {roommate.Firstname} {roommate.Lastname} {roommate.RentPortion} {roommate.MovedInDate}");
             }
 
+            // Get roommate with a specific id
             Console.WriteLine("----------------------------");
             Console.WriteLine("Getting Roommate with Id 2");
 
@@ -84,6 +85,7 @@ namespace Roommates
 
             Console.WriteLine($"{singleRoommate.Id} {singleRoommate.Firstname} {singleRoommate.Lastname} {singleRoommate.RentPortion} {singleRoommate.MovedInDate}");
 
+            // Get all roommates in the Living Room (room id of 3)
             Console.WriteLine("\nGetting All Roommates in the Living Room");
             Console.WriteLine("------------------------------------------");
             List<Roommate> roommatesInRoom = roommateRepo.GetAllWithRoom(3);
@@ -91,6 +93,21 @@ namespace Roommates
             {
                 Console.WriteLine($"{roommate.Id} {roommate.Firstname} {roommate.Lastname} {roommate.RentPortion} {roommate.MovedInDate} {roommate.Room.Name}");
             }
+
+            // Create a new roommate
+            Roommate fred = new Roommate()
+            {
+                Firstname = "Friedrich",
+                Lastname = "Franzferdinand",
+                RentPortion = 25,
+                MovedInDate = new DateTime(2020, 03, 04),
+                Room = allRooms[1]
+            };
+
+            roommateRepo.Insert(fred);
+
+            Console.WriteLine("\n-----------------------------");
+            Console.WriteLine($"Added new roommate with id {fred.Id}");
 
 
 

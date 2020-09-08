@@ -112,5 +112,32 @@ namespace Roommates.Repositories
                 }
             }
         }
+
+        public void Insert(Roommate roommate)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Roommate (FirstName, LastName, RentPortion, MoveInDate, RoomId)
+                                        OUTPUT INSERTED.Id
+                                        VALUES (@firstname, @lastname, @rentPortion, @moveInDate, @RoomId)";
+                    cmd.Parameters.AddWithValue("@firstname", roommate.Firstname);
+                    cmd.Parameters.AddWithValue("@lastname", roommate.Lastname);
+                    cmd.Parameters.AddWithValue("@rentPortion", roommate.RentPortion);
+                    cmd.Parameters.AddWithValue("@moveInDate", roommate.MovedInDate);
+                    cmd.Parameters.AddWithValue("@RoomId", roommate.Room.Id);
+                    int id = (int)cmd.ExecuteScalar();
+
+                    roommate.Id = id;
+                }
+            }
+        }
+
+        public void Update(Roommate roommate)
+        {
+
+        }
     }
 }
