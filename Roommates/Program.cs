@@ -17,6 +17,29 @@ namespace Roommates
         {
             RoomRepository roomRepo = new RoomRepository(CONNECTION_STRING);
 
+            // Main Menu
+            Console.Clear();
+            Console.WriteLine("Welcome to the Roommate Database");
+            Console.WriteLine("What would you like to do? Choose a number:");
+            Console.WriteLine(" 1) Show all rooms");
+            Console.WriteLine(" 2) Add a new room");
+            Console.WriteLine(" 3) Update a room listing");
+            Console.WriteLine(" 4) Remove a room");
+            Console.WriteLine(" 5) Show all roommates");
+            Console.WriteLine(" 6) Add a new roommate");
+            Console.WriteLine(" 7) Update a roommate's information");
+            Console.WriteLine(" 8) Remove a roommate");
+            Console.WriteLine(" 9) Show a report of all roommates and their room assignments");
+            string userSelection = Console.ReadLine();
+            bool correctEntry = Int32.TryParse(userSelection, out int menuNumber);
+            while (!correctEntry || menuNumber < 1 || menuNumber > 9)
+            {
+                Console.WriteLine("Invalid selection.");
+                userSelection = Console.ReadLine();
+                correctEntry = Int32.TryParse(userSelection, out menuNumber);
+            }
+
+
             Console.WriteLine("Getting All Rooms:");
             Console.WriteLine();
 
