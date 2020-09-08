@@ -134,9 +134,17 @@ namespace Roommates
             }
 
 
-
-
-
+            // Final report - roommates with rooms
+            Console.WriteLine("\nReport -- All Roommates and their Rooms");
+            Console.WriteLine("=======================================");
+            foreach (Room room in allRooms)
+            {
+                roommatesInRoom = roommateRepo.GetAllWithRoom(room.Id);
+                foreach (Roommate roommate in roommatesInRoom)
+                {
+                    Console.WriteLine($"{roommate.Firstname} {roommate.Lastname}: {room.Name}");
+                }
+            }
         }
     }
 }
