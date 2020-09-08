@@ -123,6 +123,15 @@ namespace Roommates
             }
 
 
+            // Delete roommate
+            roommateRepo.Delete(fred.Id);
+            allRoommates = roommateRepo.GetAll();
+            Console.WriteLine("--------------------------------");
+            Console.WriteLine($"Deleted Friedrich");
+            foreach (Roommate roommate in allRoommates)
+            {
+                Console.WriteLine($"{roommate.Id} {roommate.Firstname} {roommate.Lastname} {roommate.RentPortion} {roommate.MovedInDate}");
+            }
 
 
 
