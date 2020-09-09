@@ -20,16 +20,20 @@ namespace Roommates
             // Main Menu
             Console.Clear();
             Console.WriteLine("Welcome to the Roommate Database");
+            Console.WriteLine("Copyright (C) MMXX");
+            Console.WriteLine("--------------------------------");
             Console.WriteLine("What would you like to do? Choose a number:");
             Console.WriteLine(" 1) Show all rooms");
-            Console.WriteLine(" 2) Add a new room");
-            Console.WriteLine(" 3) Update a room listing");
-            Console.WriteLine(" 4) Remove a room");
-            Console.WriteLine(" 5) Show all roommates");
-            Console.WriteLine(" 6) Add a new roommate");
-            Console.WriteLine(" 7) Update a roommate's information");
-            Console.WriteLine(" 8) Remove a roommate");
-            Console.WriteLine(" 9) Show a report of all roommates and their room assignments");
+            Console.WriteLine(" 2) View room #1");
+            Console.WriteLine(" 3) Add a new room");
+            Console.WriteLine(" 4) Update a room listing");
+            Console.WriteLine(" 5) Remove a room");
+            Console.WriteLine(" 6) Show all roommates");
+            Console.WriteLine(" 7) Show roommate #1");
+            Console.WriteLine(" 8) Add a new roommate");
+            Console.WriteLine(" 9) Update a roommate's information");
+            Console.WriteLine(" 10) Remove a roommate");
+            Console.WriteLine(" 11) Show a report of all roommates and their room assignments");
             string userSelection = Console.ReadLine();
             bool correctEntry = Int32.TryParse(userSelection, out int menuNumber);
             while (!correctEntry || menuNumber < 1 || menuNumber > 9)
@@ -39,55 +43,35 @@ namespace Roommates
                 correctEntry = Int32.TryParse(userSelection, out menuNumber);
             }
 
-
-            Console.WriteLine("Getting All Rooms:");
-            Console.WriteLine();
-
-            List<Room> allRooms = roomRepo.GetAll();
-
-            foreach (Room room in allRooms)
+            switch (menuNumber)
             {
-                Console.WriteLine($"{room.Id} {room.Name} {room.MaxOccupancy}");
+                case 1:
+                    GetAllRooms(roomRepo);
+                    break;
+                case 2:
+                    GetSingleRoom(roomRepo);
+                    break;
+                case 3:
+                    AddNewRoom(roomRepo);
+                    break;
+                case 4:
+                    EditRoom(roomRepo);
+                    break;
+                case 5:
+                    DeleteRoom(roomRepo);
+                    break;
+                case 6:
+                    break;
+                case 7:
+                    break;
+                case 8:
+                    break;
+                case 9:
+                    break;
+                default:
+                    break;
             }
 
-            Console.WriteLine("----------------------------");
-            Console.WriteLine("Getting Room with Id 1");
-
-            Room singleRoom = roomRepo.GetById(1);
-
-            Console.WriteLine($"{singleRoom.Id} {singleRoom.Name} {singleRoom.MaxOccupancy}");
-
-            Room bathroom = new Room
-            {
-                Name = "Bathroom",
-                MaxOccupancy = 1
-            };
-
-            roomRepo.Insert(bathroom);
-
-            Console.WriteLine("-------------------------------");
-            Console.WriteLine($"Added the new Room with id {bathroom.Id}");
-
-            bathroom.MaxOccupancy = 3;
-            roomRepo.Update(bathroom);
-
-            allRooms = roomRepo.GetAll();
-
-            Console.WriteLine("--------------------------------");
-            Console.WriteLine($"Updated {bathroom.Name} Max Occupancy");
-            foreach (Room room in allRooms)
-            {
-                Console.WriteLine($"{room.Id} {room.Name} {room.MaxOccupancy}");
-            }
-
-            roomRepo.Delete(bathroom.Id);
-            allRooms = roomRepo.GetAll();
-            Console.WriteLine("--------------------------------");
-            Console.WriteLine($"Deleted new bathroom");
-            foreach (Room room in allRooms)
-            {
-                Console.WriteLine($"{room.Id} {room.Name} {room.MaxOccupancy}");
-            }
 
             // Get and list all roommates
             RoommateRepository roommateRepo = new RoommateRepository(CONNECTION_STRING);
@@ -168,6 +152,62 @@ namespace Roommates
                     Console.WriteLine($"{roommate.Firstname} {roommate.Lastname}: {room.Name}");
                 }
             }
+        }
+
+        static void GetAllRooms(RoomRepository roomRepo)
+        {
+            Console.WriteLine("Getting All Rooms:");
+            Console.WriteLine();
+
+            List<Room> allRooms = roomRepo.GetAll();
+
+            foreach (Room room in allRooms)
+            {
+                Console.WriteLine($"{room.Id} {room.Name} {room.MaxOccupancy}");
+            }
+
+        }
+
+        static void GetSingleRoom(RoomRepository roomRepo)
+        {
+            Console.WriteLine("----------------------------");
+            Console.WriteLine("Getting Room with Id 1");
+
+            Room singleRoom = roomRepo.GetById(1);
+
+            Console.WriteLine($"{singleRoom.Id} {singleRoom.Name} {singleRoom.MaxOccupancy}");
+        }
+
+        static void AddNewRoom(RoomRepository roomRepo)
+        {
+            Room bathroom = new Room
+            {
+                Name = "Bathroom",
+                MaxOccupancy = 1
+            };
+
+            roomRepo.Insert(bathroom);
+
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine($"Added the new Room with id {bathroom.Id}");
+        }
+
+        static void EditRoom(RoomRepository roomRepo)
+        {
+            Room roomToEdit = roomRepo.GetById(5);
+            roomToEdit.MaxOccupancy = 3;
+            roomRepo.Update(roomToEdit);
+
+            Console.Clear();
+            Console.WriteLine($"{roomToEdit.Name} has been updated.");
+        }
+
+        static void DeleteRoom(RoomRepository roomRepo)
+        {
+            roomRepo.Delete(5);
+
+            Console.Clear();
+            Console.WriteLine("Room has been deleted.");
         }
     }
 }
