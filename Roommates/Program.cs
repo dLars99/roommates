@@ -98,6 +98,9 @@ namespace Roommates
                     case 14:
                         EditChore(choreRepo);
                         break;
+                    case 15:
+                        UnassignChore(choreRepo);
+                        break;
                     case 16:
                         DeleteChore(choreRepo);
                         break;
@@ -346,15 +349,17 @@ namespace Roommates
             Console.WriteLine($"{assignedChore.Name} has been assigned to {assignedRoommate.Firstname}");
         }
 
-        //static void UnassignChore(ChoreRepository choreRepo)
-        //{
-        //    Dictionary<Chore, Roommate> allAssignments = choreRepo.GetAllAssignments();
+        static void UnassignChore(ChoreRepository choreRepo)
+        {
+            Console.Clear();
+            Console.WriteLine("This function coming soon...");
+            //dictionary<chore, roommate> allassignments = chorerepo.getallassignments();
 
-        //    for (int i = 1; i < allAssignments.Count + 1; i++)
-        //    {
-        //        Console.WriteLine("")
-        //    }
-        //}
+            //for (int i = 1; i < allassignments.count + 1; i++)
+            //{
+            //    console.writeline("")
+            //}
+        }
 
         static void EditChore(ChoreRepository choreRepo)
         {
