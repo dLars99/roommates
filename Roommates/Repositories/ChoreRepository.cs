@@ -35,6 +35,43 @@ namespace Roommates.Repositories
             }
         }
 
+        public Dictionary<Chore, Roommate> GetAllAssignments()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT c.Id AS Chorizo, c.Name, r.Id, r.FirstName, r.LastName
+                                          FROM RoommateChore rc
+                                     LEFT JOIN Roommate r ON rc.RoommateId = r.Id
+                                     LEFT JOIN Chore c ON rc.ChoreId = c.Id";
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    Dictionary<Chore, Roommate> assignedChores = new Dictionary<Chore, Roommate>();
+                    while (reader.Read())
+                    {
+                        Chore chore = new Chore()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Chorizo")),
+                            Name = reader.GetString(reader.GetOrdinal("Name")),
+                        };
+                        Roommate roommate = new Roommate()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Firstname = reader.GetString(reader.GetOrdinal("FirstName")),
+                            Lastname = reader.GetString(reader.GetOrdinal("LastName"))
+                        };
+
+                        assignedChores.Add(chore, roommate);
+
+                    }
+                    reader.Close();
+                    return assignedChores;
+                }
+            }
+
+        }
+
         public void Add(Chore newChore)
         {
             using (SqlConnection conn = Connection)
@@ -87,7 +124,7 @@ namespace Roommates.Repositories
             }
         }
 
-        public void DeleteChore(int id)
+        public void Delete(int id)
         {
             using (SqlConnection conn = Connection)
             {

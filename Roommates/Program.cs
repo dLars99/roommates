@@ -19,77 +19,103 @@ namespace Roommates
             RoommateRepository roommateRepo = new RoommateRepository(CONNECTION_STRING);
             ChoreRepository choreRepo = new ChoreRepository(CONNECTION_STRING);
 
-            // Main Menu
-            Console.Clear();
-            Console.SetCursorPosition((Console.WindowWidth - 32) / 2, Console.CursorTop);
-            Console.WriteLine("Welcome to the Roommate Database");
-            Console.SetCursorPosition((Console.WindowWidth - 18) / 2, Console.CursorTop);
-            Console.WriteLine("Copyright (C) MMXX");
-            Console.SetCursorPosition((Console.WindowWidth - 32) / 2, Console.CursorTop);
-            Console.WriteLine("--------------------------------");
-            Console.WriteLine("What would you like to do? Choose a number:");
-            Console.WriteLine(" 1) Show all rooms");
-            Console.WriteLine(" 2) View room #1");
-            Console.WriteLine(" 3) Add a new room");
-            Console.WriteLine(" 4) Update a room listing");
-            Console.WriteLine(" 5) Remove a room");
-            Console.WriteLine(" 6) Show all roommates");
-            Console.WriteLine(" 7) Show roommate #1");
-            Console.WriteLine(" 8) Add a new roommate");
-            Console.WriteLine(" 9) Update a roommate's information");
-            Console.WriteLine(" 10) Remove a roommate");
-            Console.WriteLine(" 11) Display all chores");
-            Console.WriteLine(" 12) Add a new chore");
-            Console.WriteLine(" 13) Assign a chore to a roommate");
-            Console.WriteLine(" 14) Edit a chore's name");
-            Console.WriteLine(" 15) Unassign a chore from a roommate");
-            Console.WriteLine(" 16) Delete a chore");
-            Console.WriteLine(" 17) Show a report of all roommates and their room assignments");
-            Console.WriteLine(" 18) Show a report of all roommates and their chore assigments");
-            Console.WriteLine("\n Or enter anything else to exit the program");
-            string userSelection = Console.ReadLine();
-            bool correctEntry = Int32.TryParse(userSelection, out int menuNumber);
-
-            switch (menuNumber)
+            // Main program loop
+            bool exitProgram = false;
+            while (!exitProgram)
             {
-                case 1:
-                    GetAllRooms(roomRepo);
-                    break;
-                case 2:
-                    GetSingleRoom(roomRepo);
-                    break;
-                case 3:
-                    AddNewRoom(roomRepo);
-                    break;
-                case 4:
-                    EditRoom(roomRepo);
-                    break;
-                case 5:
-                    DeleteRoom(roomRepo);
-                    break;
-                case 6:
-                    GetAllRoommates(roommateRepo);
-                    break;
-                case 7:
-                    GetSingleRoommate(roommateRepo);
-                    break;
-                case 8:
-                    AddNewRoommate(roomRepo, roommateRepo);
-                    break;
-                case 9:
-                    EditRoommate(roommateRepo);
-                    break;
-                case 10:
-                    DeleteRoommate(roommateRepo);
-                    break;
-                case 11:
-                    GetAllChores(choreRepo);
-                    break;
-                case 12:
-                    RoommateReport(roomRepo, roommateRepo);
-                    break;
-                default:
-                    break;
+                // Main Menu
+                Console.Clear();
+                Console.SetCursorPosition((Console.WindowWidth - 32) / 2, Console.CursorTop);
+                Console.WriteLine("Welcome to the Roommate Database");
+                Console.SetCursorPosition((Console.WindowWidth - 18) / 2, Console.CursorTop);
+                Console.WriteLine("Copyright (C) MMXX");
+                Console.SetCursorPosition((Console.WindowWidth - 32) / 2, Console.CursorTop);
+                Console.WriteLine("--------------------------------");
+                Console.WriteLine("What would you like to do? Choose a number:");
+                Console.WriteLine(" 1) Show all rooms");
+                Console.WriteLine(" 2) View room #1");
+                Console.WriteLine(" 3) Add a new room");
+                Console.WriteLine(" 4) Update a room listing");
+                Console.WriteLine(" 5) Remove a room");
+                Console.WriteLine(" 6) Show all roommates");
+                Console.WriteLine(" 7) Show roommate #1");
+                Console.WriteLine(" 8) Add a new roommate");
+                Console.WriteLine(" 9) Update a roommate's information");
+                Console.WriteLine(" 10) Remove a roommate");
+                Console.WriteLine(" 11) Display all chores");
+                Console.WriteLine(" 12) Add a new chore");
+                Console.WriteLine(" 13) Assign a chore to a roommate");
+                Console.WriteLine(" 14) Edit a chore's name");
+                Console.WriteLine(" 15) Unassign a chore from a roommate");
+                Console.WriteLine(" 16) Delete a chore");
+                Console.WriteLine(" 17) Show a report of all roommates and their room assignments");
+                Console.WriteLine(" 18) Show a report of all roommates and their chore assigments");
+                Console.WriteLine("\n Or enter anything else to exit the program");
+                string userSelection = Console.ReadLine();
+                bool correctEntry = Int32.TryParse(userSelection, out int menuNumber);
+
+                switch (menuNumber)
+                {
+                    case 1:
+                        GetAllRooms(roomRepo);
+                        break;
+                    case 2:
+                        GetSingleRoom(roomRepo);
+                        break;
+                    case 3:
+                        AddNewRoom(roomRepo);
+                        break;
+                    case 4:
+                        EditRoom(roomRepo);
+                        break;
+                    case 5:
+                        DeleteRoom(roomRepo);
+                        break;
+                    case 6:
+                        GetAllRoommates(roommateRepo);
+                        break;
+                    case 7:
+                        GetSingleRoommate(roommateRepo);
+                        break;
+                    case 8:
+                        AddNewRoommate(roomRepo, roommateRepo);
+                        break;
+                    case 9:
+                        EditRoommate(roommateRepo);
+                        break;
+                    case 10:
+                        DeleteRoommate(roommateRepo);
+                        break;
+                    case 11:
+                        GetAllChores(choreRepo);
+                        break;
+                    case 12:
+                        AddNewChore(choreRepo);
+                        break;
+                    case 13:
+                        AssignChore(choreRepo, roommateRepo);
+                        break;
+                    case 14:
+                        EditChore(choreRepo);
+                        break;
+                    case 16:
+                        DeleteChore(choreRepo);
+                        break;
+                    case 17:
+                        RoommateReport(roomRepo, roommateRepo);
+                        break;
+                    case 18:
+                        ChoreReport(choreRepo, roommateRepo);
+                        break;
+                    default:
+                        exitProgram = true;
+                        break;
+                }
+                if (!exitProgram)
+                { 
+                    Console.WriteLine("Press any key to continue");
+                    Console.ReadKey();
+                }
             }
         }
 
@@ -280,7 +306,7 @@ namespace Roommates
             Console.WriteLine("\nPlease choose a chore to assign:");
             for (int i = 1; i < allChores.Count + 1; i++)
             {
-                Console.WriteLine($"{i}) {allChores[i].Name}");
+                Console.WriteLine($"{i}) {allChores[i-1].Name}");
             }
             Console.WriteLine();
             string userSelection = Console.ReadLine();
@@ -302,7 +328,7 @@ namespace Roommates
             Console.WriteLine($"\nAssign {assignedChore.Name} to a roommate:");
             for (int i = 1; i < allRoommates.Count + 1; i++)
             {
-                Console.WriteLine($"{i}) {allRoommates[i].Name}");
+                Console.WriteLine($"{i}) {allRoommates[i-1].Firstname} {allRoommates[i-1].Lastname}");
             }
             Console.WriteLine();
             userSelection = Console.ReadLine();
@@ -318,6 +344,97 @@ namespace Roommates
             choreRepo.Assign(assignedChore, assignedRoommate);
 
             Console.WriteLine($"{assignedChore.Name} has been assigned to {assignedRoommate.Firstname}");
+        }
+
+        //static void UnassignChore(ChoreRepository choreRepo)
+        //{
+        //    Dictionary<Chore, Roommate> allAssignments = choreRepo.GetAllAssignments();
+
+        //    for (int i = 1; i < allAssignments.Count + 1; i++)
+        //    {
+        //        Console.WriteLine("")
+        //    }
+        //}
+
+        static void EditChore(ChoreRepository choreRepo)
+        {
+            List<Chore> allChores = choreRepo.GetAll();
+
+            // Select a chore
+            Console.Clear();
+            Console.SetCursorPosition((Console.WindowWidth - 13) / 2, Console.CursorTop);
+            Console.WriteLine("Assign Chores");
+            Console.SetCursorPosition((Console.WindowWidth - 13) / 2, Console.CursorTop);
+            Console.WriteLine("-------------");
+            Console.WriteLine("\nPlease choose a chore to edit:");
+            for (int i = 1; i < allChores.Count + 1; i++)
+            {
+                Console.WriteLine($"{i}) {allChores[i-1].Name}");
+            }
+            Console.WriteLine();
+            string userSelection = Console.ReadLine();
+            bool validSelection = int.TryParse(userSelection, out int choreNum);
+            while (!validSelection || choreNum < 0 || choreNum > allChores.Count)
+            {
+                Console.WriteLine("Invalid selection");
+                userSelection = Console.ReadLine();
+                validSelection = int.TryParse(userSelection, out choreNum);
+            }
+            Chore editedChore = allChores[choreNum - 1];
+
+            Console.WriteLine("Please enter a new name for this chore:");
+            editedChore.Name = Console.ReadLine();
+
+            choreRepo.Update(editedChore);
+
+            Console.WriteLine($"{editedChore.Name} has been updated.");
+        }
+
+        static void DeleteChore(ChoreRepository choreRepo)
+        {
+            List<Chore> allChores = choreRepo.GetAll();
+
+            // Select a chore
+            Console.Clear();
+            Console.SetCursorPosition((Console.WindowWidth - 13) / 2, Console.CursorTop);
+            Console.WriteLine("Assign Chores");
+            Console.SetCursorPosition((Console.WindowWidth - 13) / 2, Console.CursorTop);
+            Console.WriteLine("-------------");
+            Console.WriteLine("\nPlease choose a chore to delete:");
+            for (int i = 1; i < allChores.Count + 1; i++)
+            {
+                Console.WriteLine($"{i}) {allChores[i-1].Name}");
+            }
+            Console.WriteLine();
+            string userSelection = Console.ReadLine();
+            bool validSelection = int.TryParse(userSelection, out int choreNum);
+            while (!validSelection || choreNum < 0 || choreNum > allChores.Count)
+            {
+                Console.WriteLine("Invalid selection");
+                userSelection = Console.ReadLine();
+                validSelection = int.TryParse(userSelection, out choreNum);
+            }
+            Chore deletedChore = allChores[choreNum - 1];
+
+            choreRepo.Delete(deletedChore.Id);
+
+            Console.WriteLine($"{deletedChore.Name} has been removed from the list.");
+        }
+
+        static void ChoreReport(ChoreRepository choreRepo, RoommateRepository roommateRepo)
+        {
+            Dictionary<Chore, Roommate> allAssignments = choreRepo.GetAllAssignments();
+
+            Console.Clear();
+            Console.SetCursorPosition((Console.WindowWidth - 26) / 2, Console.CursorTop);
+            Console.WriteLine("All Chores and Assignments");
+            Console.SetCursorPosition((Console.WindowWidth - 26) / 2, Console.CursorTop);
+            Console.WriteLine("--------------------------\n");
+
+            foreach (KeyValuePair<Chore, Roommate> assignment in allAssignments)
+            {
+                Console.WriteLine($"{assignment.Key.Name}: {assignment.Value.Firstname} {assignment.Value.Lastname}");
+            }
 
         }
     }
