@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using Roommates.Models;
 
@@ -82,7 +79,10 @@ namespace Roommates.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT r.Id AS RoommateId, r.FirstName, r.LastName, r.RentPortion, r.MoveInDate, s.Id AS RoomId, s.Name, s.MaxOccupancy FROM Roommate r LEFT JOIN room s ON r.RoomId = s.Id WHERE s.Id = @RoomId";
+                    cmd.CommandText = @"SELECT r.Id AS RoommateId, r.FirstName, r.LastName, r.RentPortion, r.MoveInDate, s.Id AS RoomId, s.Name, s.MaxOccupancy
+                                       FROM Roommate r
+                                       LEFT JOIN room s ON r.RoomId = s.Id
+                                       WHERE s.Id = @RoomId";
                     cmd.Parameters.AddWithValue("@roomId", roomId);
                     SqlDataReader reader = cmd.ExecuteReader();
 
