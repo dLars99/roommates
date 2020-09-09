@@ -16,6 +16,7 @@ namespace Roommates
         static void Main(string[] args)
         {
             RoomRepository roomRepo = new RoomRepository(CONNECTION_STRING);
+            RoommateRepository roommateRepo = new RoommateRepository(CONNECTION_STRING);
 
             // Main Menu
             Console.Clear();
@@ -34,6 +35,7 @@ namespace Roommates
             Console.WriteLine(" 9) Update a roommate's information");
             Console.WriteLine(" 10) Remove a roommate");
             Console.WriteLine(" 11) Show a report of all roommates and their room assignments");
+            Console.WriteLine("\n Or enter anything else to exit the program");
             string userSelection = Console.ReadLine();
             bool correctEntry = Int32.TryParse(userSelection, out int menuNumber);
             while (!correctEntry || menuNumber < 1 || menuNumber > 9)
@@ -61,96 +63,25 @@ namespace Roommates
                     DeleteRoom(roomRepo);
                     break;
                 case 6:
+                    GetAllRoommates(roommateRepo);
                     break;
                 case 7:
+                    GetSingleRoommate(roommateRepo);
                     break;
                 case 8:
+                    AddNewRoommate(roomRepo, roommateRepo);
                     break;
                 case 9:
+                    EditRoommate(roommateRepo);
+                    break;
+                case 10:
+                    DeleteRoommate(roommateRepo);
+                    break;
+                case 11:
+                    RoommateReport(roomRepo, roommateRepo);
                     break;
                 default:
                     break;
-            }
-
-
-            // Get and list all roommates
-            RoommateRepository roommateRepo = new RoommateRepository(CONNECTION_STRING);
-
-            Console.WriteLine("\nGetting All Roommates");
-            Console.WriteLine("---------------------");
-            List<Roommate> allRoommates = roommateRepo.GetAll();
-            foreach (Roommate roommate in allRoommates)
-            {
-                Console.WriteLine($"{roommate.Id} {roommate.Firstname} {roommate.Lastname} {roommate.RentPortion} {roommate.MovedInDate}");
-            }
-
-            // Get roommate with a specific id
-            Console.WriteLine("----------------------------");
-            Console.WriteLine("Getting Roommate with Id 2");
-
-            Roommate singleRoommate = roommateRepo.GetById(2);
-
-            Console.WriteLine($"{singleRoommate.Id} {singleRoommate.Firstname} {singleRoommate.Lastname} {singleRoommate.RentPortion} {singleRoommate.MovedInDate}");
-
-            // Get all roommates in the Living Room (room id of 3)
-            Console.WriteLine("\nGetting All Roommates in the Living Room");
-            Console.WriteLine("------------------------------------------");
-            List<Roommate> roommatesInRoom = roommateRepo.GetAllWithRoom(3);
-            foreach (Roommate roommate in roommatesInRoom)
-            {
-                Console.WriteLine($"{roommate.Id} {roommate.Firstname} {roommate.Lastname} {roommate.RentPortion} {roommate.MovedInDate} {roommate.Room.Name}");
-            }
-
-            // Create a new roommate
-            Roommate fred = new Roommate()
-            {
-                Firstname = "Friedrich",
-                Lastname = "Franzferdinand",
-                RentPortion = 25,
-                MovedInDate = new DateTime(2020, 03, 04),
-                Room = allRooms[1]
-            };
-
-            roommateRepo.Insert(fred);
-
-            Console.WriteLine("\n-----------------------------");
-            Console.WriteLine($"Added new roommate with id {fred.Id}");
-
-
-            // Update roommate
-            fred.RentPortion = 20;
-
-            roommateRepo.Update(fred);
-            Console.WriteLine("Updated Friedrich to show a lower rent portion");
-            Console.WriteLine("-----------------------------------------");
-            allRoommates = roommateRepo.GetAll();
-            foreach (Roommate roommate in allRoommates)
-            {
-                Console.WriteLine($"{roommate.Id} {roommate.Firstname} {roommate.Lastname} {roommate.RentPortion} {roommate.MovedInDate}");
-            }
-
-
-            // Delete roommate
-            roommateRepo.Delete(fred.Id);
-            allRoommates = roommateRepo.GetAll();
-            Console.WriteLine("--------------------------------");
-            Console.WriteLine($"Deleted Friedrich");
-            foreach (Roommate roommate in allRoommates)
-            {
-                Console.WriteLine($"{roommate.Id} {roommate.Firstname} {roommate.Lastname} {roommate.RentPortion} {roommate.MovedInDate}");
-            }
-
-
-            // Final report - roommates with rooms
-            Console.WriteLine("\nReport -- All Roommates and their Rooms");
-            Console.WriteLine("=======================================");
-            foreach (Room room in allRooms)
-            {
-                roommatesInRoom = roommateRepo.GetAllWithRoom(room.Id);
-                foreach (Roommate roommate in roommatesInRoom)
-                {
-                    Console.WriteLine($"{roommate.Firstname} {roommate.Lastname}: {room.Name}");
-                }
             }
         }
 
@@ -208,6 +139,89 @@ namespace Roommates
 
             Console.Clear();
             Console.WriteLine("Room has been deleted.");
+        }
+
+        static void GetAllRoommates(RoommateRepository roommateRepo)
+        {
+            Console.WriteLine("\nGetting All Roommates");
+            Console.WriteLine("---------------------");
+            List<Roommate> allRoommates = roommateRepo.GetAll();
+            foreach (Roommate roommate in allRoommates)
+            {
+                Console.WriteLine($"{roommate.Id} {roommate.Firstname} {roommate.Lastname} {roommate.RentPortion} {roommate.MovedInDate}");
+            }
+        }
+
+        static void GetSingleRoommate(RoommateRepository roommateRepo)
+        {
+            Console.WriteLine("----------------------------");
+            Console.WriteLine("Getting Roommate with Id 2");
+
+            Roommate singleRoommate = roommateRepo.GetById(2);
+
+            Console.WriteLine($"{singleRoommate.Id} {singleRoommate.Firstname} {singleRoommate.Lastname} {singleRoommate.RentPortion} {singleRoommate.MovedInDate}");
+        }
+
+        static void GetRoommatesInRoom(RoommateRepository roommateRepo)
+        {
+            // Get all roommates in the Living Room (room id of 3)
+            Console.WriteLine("\nGetting All Roommates in the Living Room");
+            Console.WriteLine("------------------------------------------");
+            List<Roommate> roommatesInRoom = roommateRepo.GetAllWithRoom(3);
+            foreach (Roommate roommate in roommatesInRoom)
+            {
+                Console.WriteLine($"{roommate.Id} {roommate.Firstname} {roommate.Lastname} {roommate.RentPortion} {roommate.MovedInDate} {roommate.Room.Name}");
+            }
+
+        }
+
+        static void AddNewRoommate(RoomRepository roomRepo, RoommateRepository roommateRepo)
+        {
+            Roommate fred = new Roommate()
+            {
+                Firstname = "Friedrich",
+                Lastname = "Franzferdinand",
+                RentPortion = 25,
+                MovedInDate = new DateTime(2020, 03, 04),
+                Room = roomRepo.GetById(5)
+            };
+
+            roommateRepo.Insert(fred);
+
+            Console.WriteLine("\n-----------------------------");
+            Console.WriteLine($"Added new roommate with id {fred.Id}");
+        }
+
+        static void EditRoommate(RoommateRepository roommateRepo)
+        {
+            Roommate roommateToEdit = roommateRepo.GetById(3);
+            roommateToEdit.RentPortion = 20;
+
+            roommateRepo.Update(roommateToEdit);
+            Console.WriteLine($"{roommateToEdit.Firstname} {roommateToEdit.Lastname} has been updated!");
+        }
+
+        static void DeleteRoommate(RoommateRepository roommateRepo)
+        {
+            roommateRepo.Delete(5);
+            Console.Clear();
+            Console.WriteLine($"Roommate has been removed.");
+        }
+
+        static void RoommateReport(RoomRepository roomRepo, RoommateRepository roommateRepo)
+        {
+            // Display a report of all roommates and their rooms
+            Console.WriteLine("\nReport -- All Roommates and their Rooms");
+            Console.WriteLine("=======================================");
+            List<Room> allRooms = roomRepo.GetAll();
+            foreach (Room room in allRooms)
+            {
+                List<Roommate> roommatesInRoom = roommateRepo.GetAllWithRoom(room.Id);
+                foreach (Roommate roommate in roommatesInRoom)
+                {
+                    Console.WriteLine($"{roommate.Firstname} {roommate.Lastname}: {room.Name}");
+                }
+            }
         }
     }
 }
